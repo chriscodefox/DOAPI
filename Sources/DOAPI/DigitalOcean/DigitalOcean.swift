@@ -225,7 +225,7 @@ public struct DORemoteError: LocalizedError, Codable {
             "\(id):",
             status.map { "code: \($0)" },
             "\(message)"
-            ].flatMap { $0 }.joined(separator: " ")
+            ].compactMap { $0 }.joined(separator: " ")
     }
     
 }

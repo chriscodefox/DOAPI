@@ -21,8 +21,8 @@ let package = Package(
         .target(
             name: "DOAPI",
             dependencies: []),
-        //.testTarget(
-        //    name: "DOAPITests",
-        //    dependencies: ["DOAPI"]),
+        .testTarget(
+            name: "DOAPITests",
+            dependencies: ["DOAPI"]),
     ]
 )
