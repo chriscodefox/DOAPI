@@ -55,6 +55,7 @@ public struct DigitalOcean {
                 }
                 return
             }
+            
             bodyData = encodedBody
         } else {
             bodyData = nil
@@ -94,8 +95,18 @@ public struct DigitalOcean {
             timeoutInterval: This.timeout
         )
         
+        request.httpMethod = method
+        
         if let body = body {
             request.httpBody = body
+            
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            #if DEBUG
+            let string = String(data: body, encoding: .utf8)!
+            print("Encoded body:")
+            print(string)
+            #endif
         }
         
         request.setValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
@@ -180,7 +191,7 @@ protocol DOPagedRequest: DORequest {
 
 // Errors
 
-public enum DOError: LocalizedError {
+public enum DOError: Error {
     
     case remote(DORemoteError)
     case invalidEndpoint(String)
@@ -196,11 +207,14 @@ public enum DOError: LocalizedError {
     case missingBody
     
     case generic(String)
+}
+
+extension DOError: LocalizedError {
     
-    var localizedDescription: String {
+    public var errorDescription: String? {
         switch self {
-        case let .remote(error):
-            return error.localizedDescription
+        case let .remote(remoteError):
+            return remoteError.localizedDescription
         case let .invalidEndpoint(endpoint):
             return "Invalid endpoint: \(endpoint)"
         case let .generic(message):
@@ -213,20 +227,21 @@ public enum DOError: LocalizedError {
 
 
 
-public struct DORemoteError: LocalizedError, Codable {
+public struct DORemoteError: Error, Codable {
     
     public let id: String
     public let message: String
     public var status: Int?
     
-    var localizedDescription: String {
+}
+
+extension DORemoteError: LocalizedError {
+    public var errorDescription: String? {
         return [
             "Remote Error:",
             "\(id):",
-            status.map { "code: \($0)" },
+            self.status.map { "code: \($0)" },
             "\(message)"
-            ].flatMap { $0 }.joined(separator: " ")
+            ].compactMap { $0 }.joined(separator: " ")
     }
-    
 }
-

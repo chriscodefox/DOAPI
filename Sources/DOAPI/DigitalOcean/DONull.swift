@@ -17,7 +17,11 @@ public struct DONull: Equatable, Hashable, Comparable, Codable {
         return false
     }
     
-    public var hashValue: Int { return 0 }
+//    public var hashValue: Int { return 0 }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(0)
+    }
     
     public static let null = DONull()
 }

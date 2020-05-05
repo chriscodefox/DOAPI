@@ -12,6 +12,7 @@ public struct DOImage: Codable {
     public enum ImageType: String, Codable {
         case snapshot
         case backup
+        case base
     }
     
     public var id: Int
