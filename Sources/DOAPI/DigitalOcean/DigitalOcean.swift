@@ -56,12 +56,6 @@ public struct DigitalOcean {
                 return
             }
             
-            #if DEBUG
-            let string = String(data: encodedBody, encoding: .utf8)!
-            print("Encoded body:")
-            print(string)
-            #endif
-            
             bodyData = encodedBody
         } else {
             bodyData = nil
@@ -105,6 +99,14 @@ public struct DigitalOcean {
         
         if let body = body {
             request.httpBody = body
+            
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            #if DEBUG
+            let string = String(data: body, encoding: .utf8)!
+            print("Encoded body:")
+            print(string)
+            #endif
         }
         
         request.setValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
