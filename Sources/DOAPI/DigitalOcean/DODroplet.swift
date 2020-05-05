@@ -164,7 +164,7 @@ public struct DODroplet: Codable {
         }
         
         public struct Response: DOResponse {
-            public let volume: DODroplet
+            public let droplet: DODroplet
         }
         
         public let method = "POST"
