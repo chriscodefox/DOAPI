@@ -94,6 +94,8 @@ public struct DigitalOcean {
             timeoutInterval: This.timeout
         )
         
+        request.httpMethod = method
+        
         if let body = body {
             request.httpBody = body
         }
